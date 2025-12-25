@@ -42,11 +42,12 @@ fn group_expression(input: Vec<String>) -> Vec<Type> {
     let mut grouped: Vec<Type> = Vec::new();
     let mut count = 0;
     while count < input.len() {
+        let operator = input[count + 1].chars().next().unwrap();
         match input.get(count + 1) {
             Some(op) if op == "*" || op == "/" => {
                 grouped.push(Type::Expression(Box::new(Expression {
                     left: Type::Number(input[count].parse::<i32>().unwrap()),
-                    operator: input[count + 1].chars().next().unwrap(),
+                    operator: operator,
                     right: Type::Number(input[count + 2].parse::<i32>().unwrap()),
                 })));
                 count += 3;
@@ -55,7 +56,7 @@ fn group_expression(input: Vec<String>) -> Vec<Type> {
             Some(op) if op == "+" || op == "-" => {
                 grouped.push(Type::Expression(Box::new(Expression {
                     left: Type::Number(input[count].parse::<i32>().unwrap()),
-                    operator: input[count + 1].chars().next().unwrap(),
+                    operator: operator,
                     right: Type::Number(input[count + 2].parse::<i32>().unwrap()),
                 })));
                 count += 3;
@@ -91,33 +92,33 @@ fn evaluate_expression(input: &Expression) -> i32 {
         '/' => left / right,
         '-' => left - right,
         '+' => left + right,
-        _ => panic!("Unknown Operator")
+        _ => panic!("Unknown Operator"),
     }
 }
 
-fn evaluate_all(input :Vec<Type>)  -> i32{
+fn evaluate_all(input: Vec<Type>) -> i32 {
     let mut result = match &input[0] {
         Type::Expression(e) => evaluate_expression(e),
         Type::Number(n) => *n,
-        _ => panic!("Cannot Start With Operator!")
+        _ => panic!("Cannot Start With Operator!"),
     };
     let mut count = 1;
     while count < input.len() {
         let op = match &input[count] {
             Type::Operator(op) => *op,
-            _ => panic!("Must be an Operator!")
+            _ => panic!("Must be an Operator!"),
         };
-        let right = match &input[count+1] {
+        let right = match &input[count + 1] {
             Type::Expression(e) => evaluate_expression(e),
             Type::Number(n) => *n,
-            _ => panic!("Unexpected type shii")
+            _ => panic!("Unexpected type shii"),
         };
         match op {
             '*' => result *= right,
             '-' => result -= right,
             '+' => result += right,
             '/' => result /= right,
-            _ => panic!("Unexpected Operator")
+            _ => panic!("Unexpected Operator"),
         }
         count += 2
     }
