@@ -99,8 +99,3 @@ It serves as a stepping stone toward:
 
 ---
 
-If you want, I can also:
-
-* Help you rename this approach more formally
-* Add a “Future Work” section
-* Upgrade it into a true Pratt parser step-by-step
